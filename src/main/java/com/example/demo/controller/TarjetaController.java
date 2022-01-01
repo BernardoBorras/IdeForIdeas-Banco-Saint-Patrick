@@ -1,14 +1,12 @@
 package com.example.demo.controller;
 
-import java.util.Optional;
-
+import com.example.demo.models.TarjetaModel;
 import com.example.demo.models.UsuarioModel;
-import com.example.demo.service.UsuarioService;
+import com.example.demo.service.TarjetaService;
 import com.example.demo.utils.JWTUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,35 +19,34 @@ import de.mkammerer.argon2.Argon2Factory;
 
 @RestController
 @RequestMapping("/api")
-public class UsuarioController {
+public class TarjetaController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private TarjetaService tarjetaService;
 
     @Autowired
     private JWTUtil jwtUtil;
 
-    // CREAR USUARIO
+    // CREAR TARJETA (Solo accesible desde PostMan o similares)
     @CrossOrigin
     @PostMapping(path = "/usuario")
-    public void postUsuario(@RequestBody UsuarioModel usuario) {
+    public void postTarjeta(@RequestBody TarjetaModel tarjeta) {
 
         Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2id);
-        String hash = argon2.hash(1, 1024, 1, usuario.getContrasenia());
-        usuario.setContrasenia(hash);
+        String hash = argon2.hash(1, 1024, 1, tarjeta.getPin());
+        tarjeta.setPin(hash);
 
-        usuarioService.postUsuario(usuario);
+        tarjetaService.postTarjeta(tarjeta);
     }
 
     // SISTEMA DE LOGUEO
     // Revisa las credenciales. Si son validas crea un token y se lo da al usuario.
     @CrossOrigin
     @PostMapping(path = "/login")
-    public String login(@RequestBody UsuarioModel usuario) {
-
-        UsuarioModel usuarioLogueado = usuarioService.getUsuarioByCredenciales(usuario);
-        if (usuarioLogueado != null) {
-            String tokenJwt = jwtUtil.create(String.valueOf(usuarioLogueado.getId()), usuarioLogueado.getEmail());
+    public String login(@RequestBody TarjetaModel tarjeta) {
+        TarjetaModel tarjetaLogueada = tarjetaService.getTarjetaByCredenciales(tarjeta);
+        if (tarjetaLogueada != null) {
+            String tokenJwt = jwtUtil.create(String.valueOf(tarjetaLogueada.getId()), tarjetaLogueada.getNumero());
             return tokenJwt;
         }
         return "FAIL";
@@ -65,25 +62,15 @@ public class UsuarioController {
         }
     }
 
-    // BUSCAR USUARIO
+    // GET USUARIO
     @CrossOrigin
     @GetMapping(path = "/usuario")
-    public Optional<UsuarioModel> getUsuario(@RequestHeader(value = "Authorization") String token) {
-        Long usuarioId = validarToken(token);
-        if (usuarioId > 0) {
-            return usuarioService.getUsuario(usuarioId);
+    public UsuarioModel getUsuario(@RequestHeader(value = "Authorization") String token) {
+        Long tarjetaId = validarToken(token);
+        if (tarjetaId > 0) {
+            return tarjetaService.getUsuario(tarjetaId);
         } else {
             return null;
         }
-    }
-
-    // ELIMINAR USUARIO
-    @CrossOrigin
-    @DeleteMapping(path = "/usuario")
-    public void deleteUsuario(@RequestHeader(value = "Authorization") String token) {
-        Long usuarioId = validarToken(token);
-        if (usuarioId > 0) {
-            usuarioService.deleteUsuario(usuarioId);
-        } 
     }
 }

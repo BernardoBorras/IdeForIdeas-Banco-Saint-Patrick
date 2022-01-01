@@ -1,11 +1,16 @@
 package com.example.demo.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "usuarios")
@@ -14,14 +19,21 @@ public class UsuarioModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
-    private String nombre;
-    @Column(nullable = false)
-    private String apellido;
-    @Column(nullable = false, unique = true)
-    private String email;
-    @Column(nullable = false)
-    private String contrasenia;
+
+    // Mis tarjetas
+    @JsonIgnoreProperties({"usuario"})
+    @OneToMany(mappedBy = "usuario")
+    private List<TarjetaModel> tarjetas;
+
+    // El dinero que recibí
+    @Column(name = "transferencias_recibidas")
+    @OneToMany(mappedBy = "debitadoDe")
+    private List<TransferenciaModel> transfRecibidas;
+
+    // El dinero que envié
+    @Column(name = "transferencias_enviadas")
+    @OneToMany(mappedBy = "acreditadoA")
+    private List<TransferenciaModel> transfEnviadas;
 
     public Long getId() {
         return id;
@@ -31,36 +43,29 @@ public class UsuarioModel {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public List<TarjetaModel> getTarjetas() {
+        return tarjetas;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setTarjetas(List<TarjetaModel> tarjetas) {
+        this.tarjetas = tarjetas;
     }
 
-    public String getApellido() {
-        return apellido;
+    public List<TransferenciaModel> getTransfRecibidas() {
+        return transfRecibidas;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setTransfRecibidas(List<TransferenciaModel> transfRecibidas) {
+        this.transfRecibidas = transfRecibidas;
     }
 
-    public String getEmail() {
-        return email;
+    public List<TransferenciaModel> getTransfEnviadas() {
+        return transfEnviadas;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTransfEnviadas(List<TransferenciaModel> transfEnviadas) {
+        this.transfEnviadas = transfEnviadas;
     }
 
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-
+    
 }
