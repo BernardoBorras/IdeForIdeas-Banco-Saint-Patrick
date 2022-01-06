@@ -1,6 +1,6 @@
 package com.example.demo.models;
 
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,17 +21,33 @@ public class TransferenciaModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Debitado de
-    @JsonIgnoreProperties({ "transfRecibidas, transfEnviadas" })
+    // Debitado de Usuario
+    @JsonIgnoreProperties({ "transfRecibidas", "transfEnviadas", "tarjetas" })
     @ManyToOne()
-    @JoinColumn(name = "debitado_de", nullable = false)
-    private UsuarioModel debitadoDe;
+    @JoinColumn(name = "debitado_de_usuario", nullable = false)
+    private UsuarioModel debitadoDeUsuario;
 
-    // Acreditado a
-    @JsonIgnoreProperties({ "transfRecibidas, transfEnviadas" })
+    // Acreditado a Usuario
+    @JsonIgnoreProperties({ "transfRecibidas", "transfEnviadas", "tarjetas" })
     @ManyToOne()
-    @JoinColumn(name = "acreditado_a", nullable = false)
-    private UsuarioModel acreditadoA;
+    @JoinColumn(name = "acreditado_a_usuario", nullable = false)
+    private UsuarioModel acreditadoAUsuario;
+
+    // Debitado de Tarjeta
+    @JsonIgnoreProperties({ "transfRecibidas", "transfEnviadas", "usuario", "saldo", "pin", "id" })
+    @ManyToOne()
+    @JoinColumn(name = "debitado_de_tarjeta", nullable = false)
+    private TarjetaModel debitadoDeTarjeta;
+
+    // Acreditado a Tarjeta
+    @JsonIgnoreProperties({ "transfRecibidas", "transfEnviadas", "usuario", "saldo", "pin", "id" })
+    @ManyToOne()
+    @JoinColumn(name = "acreditado_a_tarjeta", nullable = false)
+    private TarjetaModel acreditadoATarjeta;
+
+    // Monto
+    @Column(nullable = false)
+    private Float monto;
 
     // Fecha de la transferencia
     @Column(nullable = false)
@@ -45,20 +61,44 @@ public class TransferenciaModel {
         this.id = id;
     }
 
-    public UsuarioModel getDebitadoDe() {
-        return debitadoDe;
+    public UsuarioModel getDebitadoDeUsuario() {
+        return debitadoDeUsuario;
     }
 
-    public void setDebitadoDe(UsuarioModel debitadoDe) {
-        this.debitadoDe = debitadoDe;
+    public void setDebitadoDeUsuario(UsuarioModel debitadoDeUsuario) {
+        this.debitadoDeUsuario = debitadoDeUsuario;
     }
 
-    public UsuarioModel getAcreditadoA() {
-        return acreditadoA;
+    public UsuarioModel getAcreditadoAUsuario() {
+        return acreditadoAUsuario;
     }
 
-    public void setAcreditadoA(UsuarioModel acreditadoA) {
-        this.acreditadoA = acreditadoA;
+    public void setAcreditadoAUsuario(UsuarioModel acreditadoAUsuario) {
+        this.acreditadoAUsuario = acreditadoAUsuario;
+    }
+
+    public TarjetaModel getDebitadoDeTarjeta() {
+        return debitadoDeTarjeta;
+    }
+
+    public void setDebitadoDeTarjeta(TarjetaModel debitadoDeTarjeta) {
+        this.debitadoDeTarjeta = debitadoDeTarjeta;
+    }
+
+    public TarjetaModel getAcreditadoATarjeta() {
+        return acreditadoATarjeta;
+    }
+
+    public void setAcreditadoATarjeta(TarjetaModel acreditadoATarjeta) {
+        this.acreditadoATarjeta = acreditadoATarjeta;
+    }
+
+    public Float getMonto() {
+        return monto;
+    }
+
+    public void setMonto(Float monto) {
+        this.monto = monto;
     }
 
     public Date getFecha() {

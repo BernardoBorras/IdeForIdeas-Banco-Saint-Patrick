@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.models.TarjetaModel;
+import com.example.demo.models.TransferenciaModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.service.TarjetaService;
+import com.example.demo.service.TransferenciaService;
+import com.example.demo.utils.DatosTransferencia;
 import com.example.demo.utils.JWTUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class TarjetaController {
 
     @Autowired
     private TarjetaService tarjetaService;
+
+    @Autowired
+    public TransferenciaService transferenciaService;
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -72,5 +78,26 @@ public class TarjetaController {
         } else {
             return null;
         }
+    }
+
+    // @CrossOrigin
+    // @GetMapping(path = "/fer")
+    // public UsuarioModel getFer(){
+    //     return tarjetaService.getUsuario(Long.parseLong("2"));
+    // }
+
+    // TRANSFERENCIA
+    @CrossOrigin
+    @PostMapping(path = "/transferencia")
+    public TransferenciaModel transferir(@RequestHeader(value = "Authorization") String token, @RequestBody DatosTransferencia transferencia){
+        Long tarjetaId = validarToken(token);
+        if (tarjetaId > 0) {
+            
+            System.out.println("Token validado. Iniciando transferencia.");
+
+            return transferenciaService.transferir(transferencia, tarjetaId);
+        }
+        return null;
+        
     }
 }

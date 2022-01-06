@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login de usuario</title>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://kit.fontawesome.com/1af01b6e6a.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <form class="login form-signin" action="../controller/checklogin.jsp" method="POST" data-aos="zoom-in-up">
+      <img id="center" class="mb-4" src="./assets/img/favicon.png" width="72" height="72" alt="logo">
+      <br>
+      <p class="title">Ingresa al sistema</p>
+
+
+
+
+      <input id="txtNumero" type="number" name="inputEmail" class="form-control" placeholder="Ingrese su tarjeta"
+        autofocus required />
+      <i class="fa fa-credit-card"></i>
+
+      <input id="txtPin" type="password" name="inputPassword" class="form-control" placeholder="Ingrese su pin"
+        required />
+      <i class="fa fa-key"></i>
+
+      <button type="button" v-on:click="datos.iniciarSesion()">
+        <i class="spinner"></i>
+        <span class="state">Ingresar</span>
+      </button>
+    </form>
+    <br>
+
+    <div class="error" data-aos="flip-up" data-aos-duration="3000">
+      <p id="e">Usuario o password incorrectos, por favor vuelva a ingresarlos.</p>
+    </div>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="./script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- Matias -->
+    <script src="./assets/js/login.js"></script>
+</body>
+
+</html>
+<script>
+  AOS.init();
+</script>

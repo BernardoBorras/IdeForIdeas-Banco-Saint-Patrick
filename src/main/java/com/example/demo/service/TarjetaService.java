@@ -49,4 +49,5 @@ public class TarjetaService {
         TarjetaModel tarjeta = tarjetaRepository.findById(tarjetaId).get();
         return tarjeta.getUsuario();
     }
+
 }

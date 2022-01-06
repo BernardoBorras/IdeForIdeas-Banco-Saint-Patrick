@@ -21,19 +21,21 @@ public class UsuarioModel {
     private Long id;
 
     // Mis tarjetas
-    @JsonIgnoreProperties({"usuario"})
+    @JsonIgnoreProperties({ "usuario" })
     @OneToMany(mappedBy = "usuario")
     private List<TarjetaModel> tarjetas;
 
-    // El dinero que recibí
-    @Column(name = "transferencias_recibidas")
-    @OneToMany(mappedBy = "debitadoDe")
-    private List<TransferenciaModel> transfRecibidas;
-
     // El dinero que envié
-    @Column(name = "transferencias_enviadas")
-    @OneToMany(mappedBy = "acreditadoA")
+    @JsonIgnoreProperties({ "debitadoDeUsuario", "debitadoDeTarjeta" })
+    @Column(name = "transferencias_recibidas")
+    @OneToMany(mappedBy = "debitadoDeUsuario")
     private List<TransferenciaModel> transfEnviadas;
+
+    // El dinero que recibí
+    @JsonIgnoreProperties({ "acreditadoAUsuario", "acreditadoATarjeta" })
+    @Column(name = "transferencias_enviadas")
+    @OneToMany(mappedBy = "acreditadoAUsuario")
+    private List<TransferenciaModel> transfRecibidas;
 
     public Long getId() {
         return id;
@@ -67,5 +69,4 @@ public class UsuarioModel {
         this.transfEnviadas = transfEnviadas;
     }
 
-    
 }
